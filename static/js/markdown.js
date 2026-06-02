@@ -300,7 +300,10 @@ function _emojiImg(emoji) {
   // with the surrounding text color (currentColor), so emoji render as a single
   // theme-tinted line glyph — never colorful (project rule). If the proxy can't
   // supply the glyph it returns a transparent SVG, so the mask shows nothing.
-  return `<span class="emoji" role="img" aria-label="${emoji}" style="--em:url('/api/emoji/${code}.svg')"></span>`;
+  // Include the unicode emoji as a fallback text node. CSS renders it as a
+  // monochrome silhouette (via text-shadow) so emoji remain visible even when
+  // the proxy returns a blank SVG (offline / CDN blocked / unknown codepoints).
+  return `<span class="emoji" role="img" aria-label="${emoji}" style="--em:url('/api/emoji/${code}.svg')">${emoji}</span>`;
 }
 function _svgifyText(text) {
   if (!_emojiSeg) return text;
